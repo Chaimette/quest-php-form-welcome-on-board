@@ -5,7 +5,7 @@ header {
     background-color: var(--primary-color);
     color: #fff;
     text-align: center;
-    min-height: 50vh;
+    min-height: 5vh;
 }
 
 header h1 {

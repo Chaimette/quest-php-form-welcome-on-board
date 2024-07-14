@@ -55,7 +55,79 @@
                 quaerat nemo nam, consequuntur nisi alias in praesentium. Fuga amet esse nam doloremque ut nemo nostrum.
             </p>
         </section>
-        <?php //@todo Add a contact form  ?>
+        <section class="container">
+            <h2>Get in touch</h2>
+            <?php
+            $errors = [];
+            $name = $email = $subject = $message = '';
+
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                if (empty($_POST["name"])) {
+                    $errors[] = "Le nom est obligatoire.";
+                } else {
+                    $name = htmlspecialchars($_POST["name"]);
+                }
+
+                if (empty($_POST["email"])) {
+                    $errors[] = "L'email est obligatoire.";
+                } elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+                    $errors[] = "Format d'email invalide.";
+                } else {
+                    $email = htmlspecialchars($_POST["email"]);
+                }
+
+                if (empty($_POST["subject"])) {
+                    $errors[] = "Le sujet est obligatoire.";
+                } else {
+                    $subject = htmlspecialchars($_POST["subject"]);
+                }
+
+                $message = isset($_POST["message"]) ? htmlspecialchars($_POST["message"]) : '';
+
+                if (empty($errors)) {
+                    header("Location: thank_you.php");
+                    exit();
+                }
+            }
+            ?>
+
+            <?php if (!empty($errors)): ?>
+                <h3>Please fix errors below</h3>
+                <div class="errors">
+                    <ul>
+                        <?php foreach ($errors as $error): ?>
+                            <li><?php echo $error; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+            <form action="index.php" method="post">
+                <div>
+                    <label for="name">Name *</label>
+                    <input type="text" id="name" name="name" >
+                </div>
+                <div>
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" >
+                </div>
+                <div>
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject" >
+                        <option value="Prendre rendez-vous">Prendre rendez-vous</option>
+                        <option value="Inscription à la newsletter">Inscription à la newsletter</option>
+                        <option value="Réclamation">Réclamation</option>
+                        <option value="Demander un devis">Demander un devis</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message"></textarea>
+                </div>
+                <div>
+                    <button type="submit">Send</button>
+                </div>
+            </form>
+        </section>
     </main>
     <?php include '_footer.php' ?>
 </body>
